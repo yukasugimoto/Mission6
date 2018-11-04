@@ -1,4 +1,7 @@
 <?php
+//投稿画像を一覧表示するページ。画像クリックするとpost_view.phpにとべる
+
+//セッション
 session_start();
 if(!isset($_SESSION["name"])) {
     $no_login_url = "login.php";
