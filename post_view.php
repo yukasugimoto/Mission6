@@ -1,4 +1,6 @@
 <?php
+//review_top.phpから画像をクリックするとここへとぶ。該当の投稿が表示される。
+
 //セッション
 session_start();
 if(!isset($_SESSION["name"])) {
