@@ -1,4 +1,7 @@
 <?php
+//投稿ページ。
+
+//セッション
 session_start();
 if(!isset($_SESSION["name"])) {
     $no_login_url = "login.php";
