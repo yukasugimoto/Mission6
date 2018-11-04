@@ -1,4 +1,6 @@
 <?php
+//登録画面
+
 //定義
 $name = ( isset($_POST['name'] ) === true ) ?$_POST['name']: "";
 $mail = ( isset($_POST['mail'] ) === true ) ?$_POST['mail']: "";
