@@ -39,6 +39,7 @@ if(!isset($_SESSION["name"])) {
 			<a href="post_view.php?id=<?php echo $row['id']; ?>"><img src="picture.php?target=<?php echo $row['image']; ?>", width="30%">
 			<br><br>
 		<?php endforeach; ?>
+		<a href="logout.php?logout">ログアウト</a>
 
 
 	</body>
