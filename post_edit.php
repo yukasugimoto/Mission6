@@ -5,12 +5,12 @@ if(!isset($_SESSION["name"])) {
     header("Location: {$no_login_url}");
     exit;
 }
-
 //定義
 $name = ( isset( $_POST['name'] ) === true ) ?$_POST['name']: "";
 $place = ( isset( $_POST['place'] ) === true ) ?$_POST['place']: "";
 $post = ( isset ( $_POST['post'] ) === true ) ?$_POST['post']: "";
-$image = ( isset( $_POST['image'] ) === true ) ?$_POST['image']: "";
+//$image = $_POST['image'];
+//$image = ( isset( $_POST['image'] ) === true ) ?$_POST['image']: "";
 $pass = ( isset( $_POST['pass'] ) === true ) ?$_POST['pass']: "";
 $date = date("Y/m/d H:i:s");
 $errmsgn="";
@@ -25,43 +25,44 @@ $pattern="/^[a-z0-9A-Z\-_]+\.[a-zA-Z]{3}$/";
 $RegisterMessage="";
 $err_msg4="";
 
+//edit
+//該当する投稿内容を編集画面に反映させる
 //データベース接続
 $dsn = '';
 $user = '';
 $password = '';
 try{
-	$pdo  =  new  PDO($dsn,$user,$password);
+	$pdo = new PDO($dsn,$user,$password);
 	$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	array(PDO::ATTR_EMULATE_PREPARES => false);
-} catch (PDOException $e) {
- exit('データベース接続失敗。'.$e->getMessage());
-}
+		}
+		catch (PDOException $e) {
+		echo("<p>Error</p>");
+		exit($e->getMessage());
+		}
 
-//テーブルの中身を確認するコマンドを使って、意図した内容が作成されているか確認する
-//$sql ='SHOW CREATE TABLE Review';
-//$result = $pdo -> query($sql);
-//foreach ($result as $row){
-//	print_r($row);
-//	}
-//echo "<hr>";
+if( isset($_GET['id'] )){
+	$post_id = ($_GET['id']);
+	$stmt = $pdo->prepare('SELECT * FROM Review WHERE id=?');
+	$params[ ] = $post_id;
+	$stmt->execute($params);
+	$result = $stmt->fetch(PDO::FETCH_ASSOC);
 
 
-
-//各項目エラーチェック→投稿完了
-if( isset($_POST['submit']) === true) {
+if( isset( $_POST['submit'])=== true ){
 	if( $name === "") $errmsgn="名前を入力してください";
 	if( $place === "") $errmsgp="場所を入力してください";
 	if( $post === "") $errmsgo="内容を入力してください";
 	if( $pass === "") $errmsga="パスワードを入力してください";
 	if( $errmsgn === "" && $errmsgp === "" && $errmsgo === ""  && $errmsga === "" ){
-		if ( isset($image)){
+		if( isset($_FILES)){
 			$image=$_FILES["image"]["name"];
 			if(!empty ($image)){
-				//ファイル名えらー
+				//ファイル名エラー
 				//if(!preg_match($pattern, $image)){
 					//$er1="ファイル名に日本語は使用できません。";
 				//}
-				//拡張子えらー
+				//拡張子エラー
 				$ext=substr($image,-3);	
 				strtolower('jpg') == strtolower('JPG');
 				strtolower('png') == strtolower	('PNG');
@@ -69,46 +70,40 @@ if( isset($_POST['submit']) === true) {
 				if($ext!="jpg" && $ext!="png" && $ext!="JPG" && $ext!="PNG" &&  $ext!="mp4" && $ext!="MP4"){
 					$er2="対応ファイルではありません。";
 				}
-			if( $er1 === "" && $er2 === "" && $er3 === ""){
-				//画像をバイナリデータに
-				$raw_data = file_get_contents($_FILES["image"]["tmp_name"]);
-				
-				//DBに格納するファイル名	
-				$imname = $_FILES["image"]["tmp_name"].date("Ymd-His");
+				if( $er1 === "" && $er2 === "" ) {
+					//画像をバイナリデータに
+					$raw_data = file_get_contents($_FILES["image"]["tmp_name"]);
+					
+					//DBに格納するファイル名
+					$imname = $_FILES["image"]["tmp_name"].date("Ymd-His");
+					
+					//DBを更新
+					$sql = "UPDATE Review set name = :name , date = :date , place = :place , post = :post , ext = :ext , image = :image , raw_data = :raw_data ,  pass = :pass WHERE id = '$post_id' ";
+					$stmt = $pdo->prepare($sql);
+					$stmt -> bindParam(':name', $name, PDO::PARAM_STR);
+					$stmt -> bindParam(':date', $date, PDO::PARAM_STR);
+					$stmt -> bindParam(':place', $place, PDO::PARAM_STR);
+					$stmt -> bindParam(':post', $post, PDO::PARAM_STR);
+					$stmt -> bindParam(':image', $imname, PDO::PARAM_STR);
+					$stmt -> bindParam(':ext', $ext, PDO::PARAM_STR);
+					$stmt -> bindParam(':raw_data', $raw_data, PDO::PARAM_STR);
+					$stmt -> bindParam(':pass', $pass, PDO::PARAM_STR);
+					$stmt -> execute();
 
-		
-			//DBに格納
-			$sql = $pdo -> prepare("INSERT INTO Review (id, name, date, place, post, image, ext, raw_data, pass) VALUES(:id, :name, :date, :place, :post, :image, :ext, :raw_data, :pass)" );
-//			$image="images";
-//			$ext="ext";
-//			$raw_data="raw_data";
-			$sql -> bindParam(':id', $id, PDO::PARAM_STR);
-			$sql -> bindParam(':name', $name, PDO::PARAM_STR);
-			$sql -> bindParam(':date', $date, PDO::PARAM_STR);
-			$sql -> bindParam(':place', $place, PDO::PARAM_STR);
-			$sql -> bindParam(':post', $post, PDO::PARAM_STR);
-			$sql -> bindParam(':image', $imname, PDO::PARAM_STR);
-			$sql -> bindParam(':ext', $ext, PDO::PARAM_STR);
-			$sql -> bindParam(':raw_data', $raw_data, PDO::PARAM_STR);
-			$sql -> bindParam(':pass', $pass, PDO::PARAM_STR);
-			$sql -> execute();
-			$message="投稿完了したよ！"; 
-			
-		//INSERTできたか確認する
-//		$check=$sql->execute();
-//		var_dump($check);
-//		if($check){
-//			$RegisterMessage = "登録が完了しました。";
-		}
-		else{
-			$err_msg4= "登録に失敗しました";
-		}
-	
-//			}
+					$message = "投稿が編集されました。";
+				}
+			}
+			else{
+				//そのままDBをアップデート！
+				$sql2 = "UPDATE Review set name='$name' , date='$date' , place='$place' , post='$post' , pass = '$pass' WHERE id = '$post_id' ";
+			$result2 = $pdo->query($sql2);
+			$message = "投稿が編集されました。";
 			}
 		}
 	}
 }
+}
+
 ?>
 
 <!DOCTYPE HTML>
@@ -118,18 +113,18 @@ if( isset($_POST['submit']) === true) {
 		<title>Review post</title>
 	</head>
 	<body>
-		<h1>旅行の写真をシェアしよう</h1>
+		<h1>投稿を編集する</h1>
 		<br>
 		<?php echo $message; ?> <br>
+		<a href="post_view.php?id=<?php echo $result['id']; ?>">戻る</a>
 		<a href="review_top.php">投稿一覧へ</a>
-		<?php echo $err_msg4; ?>
 		<form action="" method="post" enctype="multipart/form-data">
 			名前
-			<input type="text" name="name" size="20" value="<?php echo $_SESSION["name"]; ?>">
+			<input type="text" name="name" size="20" value="<?php echo $result['name']; ?>">
 			<?php echo $errmsgn; ?>
 			<br>
 			場所
-			<input type="text" name="place" size="20" value="<?php echo $place; ?>">
+			<input type="text" name="place" size="20" value="<?php echo $result['place']; ?>">
 			<?php echo $errmsgp; ?>
 			<br><br>
 			写真を投稿する ※対応ファイル(jpg,png,mp4)<br>
@@ -139,16 +134,16 @@ if( isset($_POST['submit']) === true) {
 			<?php echo $er2; ?>
 			<br>
 			どんな写真ですか？<br>
-			<textarea name="post" rows="20" cols="60" value="<?php echo $post; ?>"></textarea>
+			<textarea name="post" rows="20" cols="60"><?php echo $result['post']; ?></textarea>
 			<br>
 			<?php echo $errmsgo; ?>
 
 			<br><br>
 			パスワード（編集、削除時に使用します）<br>
-			<input type="text" name="pass" size="20">
+			<input type="text" name="pass" size="20" value="<?php echo $result['pass']; ?>">
 			<?php echo $errmsga; ?>
 			<br>
-			<input type="submit" name="submit" value="投稿">
+			<input type="submit" name="submit" value="編集">
 			<br><br>
 		</form>
 	</body>

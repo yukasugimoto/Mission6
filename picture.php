@@ -1,6 +1,4 @@
 <?php
-//画像を表示させるページ
-
 //セッション
 session_start();
 if(!isset($_SESSION["name"])) {
@@ -19,7 +17,8 @@ if(!isset($_SESSION["name"])) {
 	//mimetypes
 	$mime = array(
 		'png' => 'image/png',
-		'jpeg' => 'image/jpeg'
+		'jpeg' => 'image/jpeg',
+		'mp4' => 'video/mp4'
 		);
 	
 //データベース接続
@@ -40,7 +39,7 @@ try{
 	header("Content-Type: ".$mime[$row["ext"]] );
 	echo ($row["raw_data"]);
 	
-//サムネイル？？
+	
 //$ext = $row["ext"];
 //$orifile = $row["raw_data"];
 //list($oriwidth, $oriheight) = getimagesize($orifile);

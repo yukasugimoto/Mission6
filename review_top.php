@@ -1,7 +1,4 @@
 <?php
-//投稿画像を一覧表示するページ。画像クリックするとpost_view.phpにとべる
-
-//セッション
 session_start();
 if(!isset($_SESSION["name"])) {
     $no_login_url = "login.php";
@@ -9,9 +6,9 @@ if(!isset($_SESSION["name"])) {
     exit;
 }
 		//データベース接続
-		$dsn = '';
-		$user = '';
-		$password = '';
+$dsn = '';
+$user = '';
+$password = '';
 		try{
 			$pdo  =  new  PDO($dsn,$user,$password);
 			$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -33,17 +30,22 @@ if(!isset($_SESSION["name"])) {
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 		<title>Review top</title>
+		<link rel="stylesheet" href="review_top.css">
 	</head>
 	<body>
 		<h1>旅行の写真をシェアしよう</h1>
 		<br>
 		投稿は<a href="review_post.php">コチラ</a> <br>
 		<?php foreach ($result as $row): ?>
-			<a href="post_view.php?id=<?php echo $row['id']; ?>"><img src="picture.php?target=<?php echo $row['image']; ?>", width="30%">
-			<br><br>
+			<?php if ($row['ext'] == "jpg" || $row['ext'] == "JPG" || $row['ext'] == "png" || $row['ext'] == "PNG") : ?>
+				<a href="post_view.php?id=<?php echo $row['id']; ?>"><img src="picture.php?target=<?php echo $row['image']; ?>"></a>
+			<?php elseif($row['ext'] == "mp4" || $row['ext'] == "MP4") : ?>
+				<a href="post_view.php?id=<?php echo $row['id']; ?>"><video src="picture.php?target=<?php echo $row['image']; ?>" width="200" height="150"></video></a>
+			<?php endif; ?>
 		<?php endforeach; ?>
+		<br><br>
 		<a href="logout.php?logout">ログアウト</a>
-
+		<br>
 
 	</body>
 </html>

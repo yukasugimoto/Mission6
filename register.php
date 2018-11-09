@@ -1,6 +1,12 @@
 <?php
-//登録画面
-
+//セッション開始
+//session_start( );
+	//すでにログインしている場合にはメインページに遷移
+//	if (isset( $_SESSION['name'])) {
+//		header( 'Location: .php') ;
+//		exit;
+//	}
+	
 //定義
 $name = ( isset($_POST['name'] ) === true ) ?$_POST['name']: "";
 $mail = ( isset($_POST['mail'] ) === true ) ?$_POST['mail']: "";
@@ -11,14 +17,10 @@ $err_msg3 ="";
 $err_msg4 ="";
 $error = "";
 $RegisterMessage ="";
+$delete = ( isset($_POST['delete']) === true ) ?$_POST['delete']: "";
+//$delmail = ( isset($_POST['delmail']) === true ) ?$_POST['delmail']: "";
 
-//セッション開始
-//session_start( );
-	//すでにログインしている場合にはメインページに遷移
-//	if (isset( $_SESSION['USERID'])) {
-//		header( 'Location: main.php') ;
-//		exit;
-//	}
+
 
 //データベース接続
 $dsn = '';
@@ -91,6 +93,20 @@ if ( isset( $_POST['register']) === true ){
 
 	}
 }
+//delete
+//if( isset($_POST['delsend']) === true ){
+//		$sql = "SELECT * FROM USER ";
+//		$result = $pdo->query($sql);
+//		foreach($result as $row) {
+//			if($row["id"] === $delete){						
+//				$sql = "delete from USER where id = $delete "; 
+//				$result = $pdo->query($sql);
+//				$message1 = $delete."の投稿が削除されました。" ;
+//			}
+//		}
+//	}
+
+
 ?>
 
 <!DOCTYPE HTML>
@@ -109,35 +125,11 @@ if ( isset( $_POST['register']) === true ){
 		<input type="text" name="pass" size="30" placeholder="パスワード" value ="<?php echo $pass; ?>">
 		<?php echo $err_msg3; ?> <br>
 		<input type="submit" name="register" value="登録"><br>
-		ログインは<a href="http://tt-463.99sv-coco.com/mission6/login.php">こちら</a>
+		ログインは<a href="login.php">こちら</a>
 		<br><br>
 		<?php echo $RegisterMessage; ?>
 		<?php echo $error; ?>
 		<br><br>
-				<?php
-			//データベース接続
-			$dsn  =  'mysql:dbname=tt_463_99sv_coco_com;host=localhost;charset=utf8';
-			$user  =  'tt-463.99sv-coco';
-			$password  =  'Rk8FEYJA';
-			try{
-				$pdo  =  new  PDO($dsn,$user,$password);
-				array(PDO::ATTR_EMULATE_PREPARES => false);
-			} catch (PDOException $e) {
-			 exit('データベース接続失敗。'.$e->getMessage());
-			}
 
-			//show the table
-//			$sql = "SELECT * FROM USER ORDER BY id DESC";
-//			$results = $pdo -> query($sql);
-//			foreach ($results as $row){
-				//$rowの中にはテーブルのカラム名が入る
-//				echo  $row['id'].' ';
-//				echo  $row['name'].' '; 
-//				echo  $row['mail'].' ';
-//				echo  $row['pass'].'<br>'; 
-
-//			}
-
-		?>
 	</body>
 </html>
