@@ -6,9 +6,9 @@ if(!isset($_SESSION["name"])) {
     exit;
 }
 		//データベース接続
-$dsn = '';
-$user = '';
-$password = '';
+$dsn  =  '';
+$user  =  '';
+$password  =  '';
 		try{
 			$pdo  =  new  PDO($dsn,$user,$password);
 			$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -36,6 +36,13 @@ $password = '';
 		<h1>旅行の写真をシェアしよう</h1>
 		<br>
 		投稿は<a href="review_post.php">コチラ</a> <br>
+		<br>
+		検索したい語句を入力してください <br>
+		<form action="search.php" method="post">
+			<input type="text" name="search">
+			<input type="submit" value="検索">
+		</form>
+		<br>
 		<?php foreach ($result as $row): ?>
 			<?php if ($row['ext'] == "jpg" || $row['ext'] == "JPG" || $row['ext'] == "png" || $row['ext'] == "PNG") : ?>
 				<a href="post_view.php?id=<?php echo $row['id']; ?>"><img src="picture.php?target=<?php echo $row['image']; ?>"></a>

@@ -28,9 +28,9 @@ $err_msg4="";
 //edit
 //該当する投稿内容を編集画面に反映させる
 //データベース接続
-$dsn = '';
-$user = '';
-$password = '';
+$dsn  =  '';
+$user  =  '';
+$password  =  '';
 try{
 	$pdo = new PDO($dsn,$user,$password);
 	$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);

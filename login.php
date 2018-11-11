@@ -65,7 +65,9 @@ if ( isset($_POST['login']) === true) {
 		<title>Login</title>
 	</head>
 	<body>
-		ログインして旅行の写真をシェアしよう
+		<h1>ログインして旅行の写真をシェアしよう</h1>
+		<br>
+		※ゲストログイン：ユーザー名＆パスワード＝「チーム名(小文字)」で入れます！
 		<form action="" method="post">
 		<input type= "text" name="name" size="30" placeholder="ユーザー名">
 		<?php echo $err_msg1; ?> <br>

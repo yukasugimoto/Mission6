@@ -12,9 +12,9 @@ if(!isset($_SESSION["name"])) {
 $er = "";
 
 //データベース接続
-$dsn = '';
-$user = '';
-$password = '';
+$dsn  =  '';
+$user  =  '';
+$password  =  '';
 try{
 	$pdo = new PDO($dsn,$user,$password);
 	$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -91,6 +91,7 @@ if( isset($_POST['delete'])){
 			<video src="picture.php?target=<?php echo $result['image']; ?>" width="30%" controls></video>
 		<?php endif; ?>
 		<br>
+		日時：<?php echo $result['date']; ?> <br>
 		名前：<?php echo $result['name']; ?> <br>
 		場所：<?php echo $result['place']; ?> <br>
 		<?php echo $result['post']; ?> <br>

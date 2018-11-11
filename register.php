@@ -23,9 +23,9 @@ $delete = ( isset($_POST['delete']) === true ) ?$_POST['delete']: "";
 
 
 //データベース接続
-$dsn = '';
-$user = '';
-$password = '';
+$dsn  =  '';
+$user  =  '';
+$password  =  '';
 try{
 	$pdo = new PDO($dsn,$user,$password);
 	array(PDO::ATTR_EMULATE_PREPARES => false);
