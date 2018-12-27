@@ -1,4 +1,5 @@
 <?php
+//検索ページ
 
 header("Content-type: text/html; charset=utf-8");
 
