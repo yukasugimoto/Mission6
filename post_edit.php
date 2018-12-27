@@ -1,4 +1,6 @@
 <?php
+//投稿を編集するページ
+
 session_start();
 if(!isset($_SESSION["name"])) {
     $no_login_url = "login.php";
@@ -9,14 +11,13 @@ if(!isset($_SESSION["name"])) {
 $name = ( isset( $_POST['name'] ) === true ) ?$_POST['name']: "";
 $place = ( isset( $_POST['place'] ) === true ) ?$_POST['place']: "";
 $post = ( isset ( $_POST['post'] ) === true ) ?$_POST['post']: "";
-//$image = $_POST['image'];
-//$image = ( isset( $_POST['image'] ) === true ) ?$_POST['image']: "";
 $pass = ( isset( $_POST['pass'] ) === true ) ?$_POST['pass']: "";
 $date = date("Y/m/d H:i:s");
 $errmsgn="";
 $errmsgp="";
 $errmsgo="";
 $errmsga="";
+$errmsgs="";
 $er1="";
 $er2="";
 $er3="";
@@ -58,10 +59,7 @@ if( isset( $_POST['submit'])=== true ){
 		if( isset($_FILES)){
 			$image=$_FILES["image"]["name"];
 			if(!empty ($image)){
-				//ファイル名エラー
-				//if(!preg_match($pattern, $image)){
-					//$er1="ファイル名に日本語は使用できません。";
-				//}
+
 				//拡張子エラー
 				$ext=substr($image,-3);	
 				strtolower('jpg') == strtolower('JPG');
@@ -91,6 +89,7 @@ if( isset( $_POST['submit'])=== true ){
 					$stmt -> execute();
 
 					$message = "投稿が編集されました。";
+					header("Location: post_editok.php");
 				}
 			}
 			else{
@@ -98,6 +97,7 @@ if( isset( $_POST['submit'])=== true ){
 				$sql2 = "UPDATE Review set name='$name' , date='$date' , place='$place' , post='$post' , pass = '$pass' WHERE id = '$post_id' ";
 			$result2 = $pdo->query($sql2);
 			$message = "投稿が編集されました。";
+			header("Location: post_editok.php");
 			}
 		}
 	}
@@ -111,14 +111,47 @@ if( isset( $_POST['submit'])=== true ){
 	<head>
 		<meta charset="utf-8">
 		<title>Review post</title>
+		<style>
+			body{
+				background: #ffffff;
+			}
+			header{
+				text-align: center;
+			}
+			.main{
+				background: #ffffff;
+				max-width: 700px;
+				padding: 10px;
+				padding-bottom: 60px;
+				text-align: center;
+				border: 1px solid #cccccc;
+				margin: 30px auto;
+			}
+			.mes{
+				font-size: 18pt;
+				color: #ff0000;
+			}
+			.txt{
+				display: inline-block;
+				text-align: left;
+			}
+			footer{
+				font-size: 10px;
+				text-align: center;
+			}
+				
+	</style>
+
 	</head>
 	<body>
-		<h1>投稿を編集する</h1>
-		<br>
-		<?php echo $message; ?> <br>
+		<div class="main">
+		<h2>投稿を編集する</h2>
+		<p class="mes"><?php echo $message; ?> </p><br>
 		<a href="post_view.php?id=<?php echo $result['id']; ?>">戻る</a>
 		<a href="review_top.php">投稿一覧へ</a>
+		<br><br>
 		<form action="" method="post" enctype="multipart/form-data">
+		<p class="txt">
 			名前
 			<input type="text" name="name" size="20" value="<?php echo $result['name']; ?>">
 			<?php echo $errmsgn; ?>
@@ -137,14 +170,27 @@ if( isset( $_POST['submit'])=== true ){
 			<textarea name="post" rows="20" cols="60"><?php echo $result['post']; ?></textarea>
 			<br>
 			<?php echo $errmsgo; ?>
-
-			<br><br>
+			<br>
+			おすすめ度
+			<select name="star">
+			<option value="1">1</option>
+			<option value="2">2</option>
+			<option value="3">3</option>
+			<option value="4">4</option>
+			<option value="5">5</option>
+			</select>
+			<br>
+			<?php echo $errmsgs; ?>
+			<br>
 			パスワード（編集、削除時に使用します）<br>
 			<input type="text" name="pass" size="20" value="<?php echo $result['pass']; ?>">
 			<?php echo $errmsga; ?>
 			<br>
 			<input type="submit" name="submit" value="編集">
 			<br><br>
+			</p>
 		</form>
+		</div>
+
 	</body>
 </html>
