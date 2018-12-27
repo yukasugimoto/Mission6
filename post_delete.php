@@ -1,4 +1,5 @@
 <?php 
+//投稿を削除したあとに表示される
 session_start();
 if(!isset($_SESSION["name"])) {
     $no_login_url = "login.php";
@@ -13,6 +14,19 @@ if(!isset($_SESSION["name"])) {
 	<head>
 		<meta charset="utf-8">
 		<title>Review post</title>
+		<style>
+			body{
+				background:#ffffff;
+				max-width: 700px;
+				padding:10px;
+				padding-bottom:60px;
+				text-align:center;
+				border:1px solid #cccccc;
+				margin:30px auto;
+			}
+			
+		</style>
+
 	</head>
 	<body>
 		<h1>削除完了</h1>
