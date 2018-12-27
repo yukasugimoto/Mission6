@@ -12,3 +12,5 @@
 ・日記投稿
 ・検索
 
+http://tt-463.99sv-coco.com/mission6/review_top.php
+
