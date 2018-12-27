@@ -30,7 +30,7 @@ try{
 	$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	array(PDO::ATTR_EMULATE_PREPARES => false);
 	
-//	$id = $_GET['id'];
+
 	$sql = "SELECT * FROM Review WHERE image = :target;";
 	$stmt = $pdo->prepare($sql);
     $stmt -> bindValue(":target", $target, PDO::PARAM_STR);
@@ -39,27 +39,10 @@ try{
 	header("Content-Type: ".$mime[$row["ext"]] );
 	echo ($row["raw_data"]);
 	
-	
-//$ext = $row["ext"];
-//$orifile = $row["raw_data"];
-//list($oriwidth, $oriheight) = getimagesize($orifile);
-//$thuwidth = 200;
-//$thuheight = round( $oriheight * $thuwidth / $oriwidth);
-//$oriimage = imagecreatefrompng($orifile);
-//$thuimage = imagecreatetruecolor($thuwidth, $thuheight);
-//imagecopyresized($thuimage, $oriimage, 0, 0, 0, 0,
-//$thuwidth, $thuheight,
-//$oriwidth, $oriheight);
-//imagepng($thuimage);
-//imagedestroy($oriimage);
-//imagedestroy($thumimage);
-
 }
 catch (PDOException $e) {
 		echo("<p>Error</p>");
 		exit($e->getMessage());
 }
-
-
 
 ?>
