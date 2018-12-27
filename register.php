@@ -1,11 +1,6 @@
 <?php
-//セッション開始
-//session_start( );
-	//すでにログインしている場合にはメインページに遷移
-//	if (isset( $_SESSION['name'])) {
-//		header( 'Location: .php') ;
-//		exit;
-//	}
+//新規登録画面
+
 	
 //定義
 $name = ( isset($_POST['name'] ) === true ) ?$_POST['name']: "";
@@ -18,7 +13,6 @@ $err_msg4 ="";
 $error = "";
 $RegisterMessage ="";
 $delete = ( isset($_POST['delete']) === true ) ?$_POST['delete']: "";
-//$delmail = ( isset($_POST['delmail']) === true ) ?$_POST['delmail']: "";
 
 
 
@@ -32,17 +26,6 @@ try{
 } catch (PDOException $e) {
 	exit('データベース接続失敗'.$e->getMessage());
 }
-//テーブルつくる
-//$sql = "CREATE TABLE IF NOT EXISTS `USER`"
-//."("
-//."`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,"
-//."`name` char( 25 ) NOT NULL,"
-//."`mail` VARCHAR( 35 ) NOT NULL,"
-//."`pass` VARCHAR( 100 ) NOT NULL,"
-//."UNIQUE KEY `mail` (`mail`)"
-//.");";
-//$stmt = $pdo->query($sql);
-
 
 //新規登録ボタンが押されたら
 if ( isset( $_POST['register']) === true ){
@@ -61,8 +44,6 @@ if ( isset( $_POST['register']) === true ){
 		while($item = $stmt->fetch()) {
 			if($item["name"] === $name ){
 				$error="このユーザー名はすでに使われています";
-			}elseif($item["mail"] === $mail ){
-				$error="このメールアドレスはすでに登録済みです";
 			}
 		}
 		if($error == "") {
@@ -75,22 +56,10 @@ if ( isset( $_POST['register']) === true ){
 					$sql = $pdo -> prepare("INSERT INTO USER (id, name, mail, pass) VALUES (:id, :name, :mail, :pass)" );			
 					$sql -> bindParam(':id', $id, PDO::PARAM_STR);
 					$sql -> bindParam (':name', $name, PDO::PARAM_STR);
-					$sql -> bindParam (':mail', $mail, PDO::PARAM_STR);
 					$sql -> bindParam (':pass', $password, PDO::PARAM_STR);
 					$sql -> execute();
 					$RegisterMessage = "登録が完了しました。";
-		}
-
-
-		//INSERTできたか確認する
-//		$check=$sql->execute();
-//		$var_dump($check);
-//		if($check){
-//			$RegisterMessage = "登録が完了しました。";
-//		}else{
-//			$err_msg4= "登録に失敗しました";
-//		}				
-
+		}				
 	}
 }
 //delete
@@ -114,6 +83,29 @@ if ( isset( $_POST['register']) === true ){
 	<head>
 		<meta charset="utf-8">
 		<title>Register</title>
+		<style>
+			body{
+				background: #ffffff;
+			}
+			header{
+				text-align: center;
+			}
+			.main{
+				background: #ffffff;
+				max-width: 700px;
+				padding: 10px;
+				padding-bottom:60px;
+				text-align: center;
+				border: 1px solid #cccccc;
+				margin: 30px auto;
+			}
+			.mes{
+				font-size: 18pt;
+				color: #ff0000;
+			}
+			
+		</style>
+
 	</head>
 	<body>
 		会員登録をしてください。
