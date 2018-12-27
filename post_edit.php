@@ -55,7 +55,8 @@ if( isset( $_POST['submit'])=== true ){
 	if( $place === "") $errmsgp="場所を入力してください";
 	if( $post === "") $errmsgo="内容を入力してください";
 	if( $pass === "") $errmsga="パスワードを入力してください";
-	if( $errmsgn === "" && $errmsgp === "" && $errmsgo === ""  && $errmsga === "" ){
+	if( $star === "") $errmsgs="おすすめ度を入力してください";
+	if( $errmsgn === "" && $errmsgp === "" && $errmsgo === ""  && $errmsga === "" && $errmsgs === ""){
 		if( isset($_FILES)){
 			$image=$_FILES["image"]["name"];
 			if(!empty ($image)){
@@ -76,7 +77,7 @@ if( isset( $_POST['submit'])=== true ){
 					$imname = $_FILES["image"]["tmp_name"].date("Ymd-His");
 					
 					//DBを更新
-					$sql = "UPDATE Review set name = :name , date = :date , place = :place , post = :post , ext = :ext , image = :image , raw_data = :raw_data ,  pass = :pass WHERE id = '$post_id' ";
+					$sql = "UPDATE Review set name = :name , date = :date , place = :place , post = :post , ext = :ext , image = :image , raw_data = :raw_data ,  star = :star, pass = :pass WHERE id = '$post_id' ";
 					$stmt = $pdo->prepare($sql);
 					$stmt -> bindParam(':name', $name, PDO::PARAM_STR);
 					$stmt -> bindParam(':date', $date, PDO::PARAM_STR);
@@ -85,6 +86,7 @@ if( isset( $_POST['submit'])=== true ){
 					$stmt -> bindParam(':image', $imname, PDO::PARAM_STR);
 					$stmt -> bindParam(':ext', $ext, PDO::PARAM_STR);
 					$stmt -> bindParam(':raw_data', $raw_data, PDO::PARAM_STR);
+					$stmt -> bindParam(':star', $star, PDO::PARAM_STR);
 					$stmt -> bindParam(':pass', $pass, PDO::PARAM_STR);
 					$stmt -> execute();
 
@@ -94,7 +96,7 @@ if( isset( $_POST['submit'])=== true ){
 			}
 			else{
 				//そのままDBをアップデート！
-				$sql2 = "UPDATE Review set name='$name' , date='$date' , place='$place' , post='$post' , pass = '$pass' WHERE id = '$post_id' ";
+				$sql2 = "UPDATE Review set name='$name' , date='$date' , place='$place' , post='$post' , star = '$star', pass = '$pass' WHERE id = '$post_id' ";
 			$result2 = $pdo->query($sql2);
 			$message = "投稿が編集されました。";
 			header("Location: post_editok.php");
