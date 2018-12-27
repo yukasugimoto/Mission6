@@ -6,9 +6,9 @@ if(!isset($_SESSION["name"])) {
     exit;
 }
 		//データベース接続
-		$dsn  =  'mysql:dbname=tt_463_99sv_coco_com;host=localhost;charset=utf8';
-		$user  =  'tt-463.99sv-coco';
-		$password  =  'Rk8FEYJA';	
+		$dsn  =  '';
+		$user  =  '';
+		$password  =  '';	
 		try{
 			$pdo  =  new  PDO($dsn,$user,$password);
 			$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
